@@ -1,0 +1,27 @@
+{
+  "nodeList": [
+    {
+      "id": "26113fttcrj400",
+      "label": "起点",
+      "top": "63px",
+      "left": "246px",
+      "Type": 1
+    },
+    {
+      "id": "imbp15pf7j400",
+      "label": "财务管理",
+      "top": "127px",
+      "left": "566px",
+      "Type": 3
+    }
+  ],
+  "lineList": [
+    {
+      "from": "26113fttcrj400",
+      "to": "imbp15pf7j400",
+      "label": "连线名称",
+      "id": "3l6v94vo9lq000",
+      "Remark": ""
+    }
+  ]
+}
