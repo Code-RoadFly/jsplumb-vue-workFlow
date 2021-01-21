@@ -1,20 +1,22 @@
 <template>
   <div class="node-item" ref="node"
-       :class="[(isActive || isSelected) ? 'active' : '']"
-       :style="flowNodeContainer"
-       v-click-outside="setNotActive"
-       @click="setActive"
-       @mouseenter="showAnchor"
-       @mouseleave="hideAnchor">
-      <span>{{node.label}}</span>
+    :class="[(isActive || isSelected) ? 'active' : '']"
+    :style="flowNodeContainer"
+    v-click-outside="setNotActive"
+    @click="setActive"
+    @mouseenter="showAnchor"
+    @mouseleave="hideAnchor"
+    @dblclick.prevent="editNode"
+    @contextmenu.prevent="onContextmenu">
+    <div class="log-wrap">
+      <img :src="node.logImg" alt="">
+    </div>
+    <div class="nodeName">{{node.nodeName}}</div>
       <!--连线用--//触发连线的区域-->
       <div class="node-anchor anchor-top" v-show="mouseEnter"></div>
       <div class="node-anchor anchor-right" v-show="mouseEnter"></div>
       <div class="node-anchor anchor-bottom" v-show="mouseEnter"></div>
       <div class="node-anchor anchor-left" v-show="mouseEnter"></div>
-      <div class="delete-btn" @click="deleteNode">
-        <!-- <Icon type="md-close" /> -->
-      </div>
   </div>
 </template>
 
@@ -53,6 +55,22 @@ export default {
     hideAnchor() {
       this.mouseEnter = false
     },
+    onContextmenu() {
+      this.$contextmenu({
+        items: [{
+          label: '删除',
+          disabled: false,
+          icon: "",
+          onClick: () => {
+            this.deleteNode()
+          }
+        }],
+        event,
+        customClass: 'custom-class',
+        zIndex: 9999,
+        minWidth: 180
+      })
+    },
     setActive() {
       if(window.event.ctrlKey){
         this.isSelected = !this.isSelected
@@ -74,6 +92,28 @@ export default {
       this.$emit("changeLineState", this.node.id, false)
       this.isActive = false
     },
+    editNode() {
+      this.newNodeName = this.node.nodeName
+      this.$Modal.confirm({
+        render: (h) => {
+          return h('Input', {
+              props: {
+                value: this.newNodeName,
+                autofocus: true
+              },
+              on: {
+                input: (val) => {
+                  this.newNodeName = val;
+                }
+              }
+          })
+        },
+        onOk: () => {
+          console.log(this.newNodeName)
+          this.$emit('setNodeName', this.node.id, this.newNodeName)
+        }
+      })
+    },
     deleteNode() {
       this.$emit("deleteNode", this.node)
     }
@@ -88,22 +128,32 @@ export default {
 .node-item {
   position: absolute;
   display: flex;
-  height: 50px;
-  width: 150px;
+  height: 40px;
+  width: 120px;
   justify-content: center;
   align-items: center;
+  border: 1px solid #b7b6b6;
   border-radius: 4px;
-  box-shadow: 0 0 2px #696969;
   cursor: move;
-  overflow: initial;
-  background: #fbf4dc;
-  padding: 0 10px;
+  box-sizing: content-box;
   z-index: 9995;
   &:hover {
     z-index: 9998;
     .delete-btn{
       display: block;
     }
+  }
+  .log-wrap{
+    width: 40px;
+    height: 40px;
+    border-right: 1px solid  #b7b6b6;
+  }
+  .nodeName {
+    flex-grow: 1;
+    width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   .node-anchor {
     display: flex;
@@ -136,20 +186,6 @@ export default {
     top: 50%;
     left: calc((@nodeSize / 2)*-1);
     margin-top: calc((@nodeSize / 2)*-1);
-  }
-  .delete-btn{
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    top: -9px;
-    left: calc(100% - 15px);
-    line-height: 18px;
-    border: 1px solid #942929;
-    border-radius: 10px;
-    display: none;
-    &:hover {
-      cursor: pointer;
-    }
   }
 }
 .active{

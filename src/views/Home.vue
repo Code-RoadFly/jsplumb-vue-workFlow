@@ -1,24 +1,30 @@
 <template>
   <div class="flow_region">
     <div class="nodes-wrap">
-      <div v-for="item in nodeType" :key="item.type" class="node" draggable="true" @dragstart="drag($event, item)">{{item.name}}</div>
+      <div v-for="item in nodeTypeList" :key="item.type" class="node" draggable="true" @dragstart="drag($event, item)">
+        <div class="log">
+          <img :src="item.logImg" alt="">
+        </div>
+        <div class="name">{{item.typeName}}</div>
+      </div>
     </div>
     <div id="flowWrap" ref="flowWrap" class="flow-wrap" @drop="drop($event)" @dragover="allowDrop($event)">
       <div id="flow">
         <div v-show="auxiliaryLine.isShowXLine" class="auxiliary-line-x" :style="{width: auxiliaryLinePos.width, top:auxiliaryLinePos.y + 'px', left: auxiliaryLinePos.offsetX + 'px'}"></div>
         <div v-show="auxiliaryLine.isShowYLine" class="auxiliary-line-y" :style="{height: auxiliaryLinePos.height, left:auxiliaryLinePos.x + 'px', top: auxiliaryLinePos.offsetY + 'px'}"></div>
-        <flowNode v-for="item in data.nodeList" :id="item.id" :key="item.id" :node="item" @deleteNode = "deleteNode" @changeLineState="changeLineState"></flowNode>
+        <flowNode v-for="item in data.nodeList" :id="item.id" :key="item.id" :node="item" @setNodeName="setNodeName" @deleteNode = "deleteNode" @changeLineState="changeLineState"></flowNode>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { jsPlumb } from "jsplumb";
+import { jsPlumb } from "jsplumb"
+import { nodeTypeList } from './config/init'
 import { jsplumbSetting, jsplumbConnectOptions, jsplumbSourceOptions, jsplumbTargetOptions } from './config/commonConfig'
 import methods from "./config/methods"
 import data from './config/data.json'
-import flowNode from "./components/node-item";
+import flowNode from "./components/node-item"
 export default {
   name: "FlowEdit",
   components: {
@@ -28,32 +34,7 @@ export default {
     return {
       jsPlumb: null,
       currentItem: null,
-      nodeType: [
-        {
-          type: 1,
-          name: "起点"
-        },
-        {
-          type: 2,
-          name: "销售管理"
-        },
-        {
-          type: 3,
-          name: "财务管理"
-        },
-        {
-          type: 4,
-          name: "采购管理"
-        },
-        {
-          type: 5,
-          name: "货物入库"
-        },
-        {
-          type: 6,
-          name: "终点"
-        }
-      ],
+      nodeTypeList: nodeTypeList,
       data: data,
       selectedList: [],
       jsplumbSetting: jsplumbSetting,
@@ -62,7 +43,7 @@ export default {
       jsplumbTargetOptions: jsplumbTargetOptions,
       auxiliaryLine: { isShowXLine: false, isShowYLine: false},  //对齐辅助线是否显示
       auxiliaryLinePos: { width: '100%', height: '100%', offsetX: 0, offsetY: 0, x: 20, y: 20 },
-      commonGrid: [20, 20], //节点移动最小距离
+      commonGrid: [5, 5], //节点移动最小距离
     };
   },
   mounted() {
@@ -83,13 +64,14 @@ export default {
   display: flex;
   width: 90%;
   height: 90%;
-  margin: auto;
+  margin: 20px auto;
   border: 1px solid #ccc;
   .nodes-wrap {
-    width: 100px;
+    width: 150px;
     height: 100%;
     border-right: 1px solid #ccc;
     .node {
+      display: flex;
       height: 40px;
       width: 80%;
       margin: 5px auto;
@@ -101,6 +83,14 @@ export default {
       &:active{
         cursor: grabbing;
       }
+      .log {
+        width: 40px;
+        height: 40px;
+      }
+      .name {
+        width: 0;
+        flex-grow: 1;
+      }
     }
   }
   .flow-wrap {
@@ -109,7 +99,7 @@ export default {
     overflow: hidden;
     outline: none !important;
     flex-grow: 1;
-    background-color: #fff4f4;
+    background-image: url("../assets/point.png");
     #flow {
       position: relative;
       width: 100%;

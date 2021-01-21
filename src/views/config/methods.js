@@ -82,11 +82,11 @@ const methods = {
     let showXLine = false, showYLine = false
     this.data.nodeList.some(el => {
       if(el.id !== nodeId && el.left == position[0]+'px') {
-        this.auxiliaryLinePos.x = position[0] + 75;
+        this.auxiliaryLinePos.x = position[0] + 60;
         showYLine = true
       }
       if(el.id !== nodeId && el.top == position[1]+'px') {
-        this.auxiliaryLinePos.y = position[1] + 25;
+        this.auxiliaryLinePos.y = position[1] + 20;
         showXLine = true
       }
     })
@@ -108,18 +108,16 @@ const methods = {
     this.currentItem = item;
   },
   drop(event) {
-    console.log(event)
     const containerRect = this.jsPlumb.getContainer().getBoundingClientRect();
     const scale = this.getScale();
-    let left = (event.pageX - containerRect.left -75) / scale;
-    let top = (event.pageY - containerRect.top -25) / scale;
+    let left = (event.pageX - containerRect.left -60) / scale;
+    let top = (event.pageY - containerRect.top -20) / scale;
 
     var temp = {
+      ...this.currentItem,
       id: GenNonDuplicateID(8),
-      label: this.currentItem.name,
       top: (Math.round(top/20))*20 + "px",
-      left:  (Math.round(left/20))*20 + "px",
-      Type: this.currentItem.type
+      left:  (Math.round(left/20))*20 + "px"
     };
     this.addNode(temp);
   },
@@ -161,13 +159,15 @@ const methods = {
       maxZoom: 2,
       //设置滚动缩放的组合键，默认不需要组合键
       beforeWheel: (e) => {
-        let shouldIgnore = !e.ctrlKey
-        return shouldIgnore
+        console.log(e)
+        // let shouldIgnore = !e.ctrlKey
+        // return shouldIgnore
       },
       beforeMouseDown: function(e) {
+        console.log(e)
         // allow mouse-down panning only if altKey is down. Otherwise - ignore
-        var shouldIgnore = !e.ctrlKey;
-        return shouldIgnore;
+        // var shouldIgnore = !e.ctrlKey;
+        // return shouldIgnore;
       }
     });
     this.jsPlumb.mainContainerWrap = mainContainerWrap;
@@ -204,6 +204,17 @@ const methods = {
     console.log('jsPlumb',this.jsPlumb)
   }, 
 
+  setNodeName(nodeId, name) {
+    this.data.nodeList.some((v) => {
+      if(v.id === nodeId) {
+        v.nodeName = name
+        return true
+      }else {
+        return false
+      }
+    })
+  },
+
   //删除节点
   deleteNode(node) {
     this.data.nodeList.some((v,index) => {
@@ -235,8 +246,8 @@ const methods = {
   //初始化节点位置  （以便对齐,居中）
   fixNodesPosition() {
     if(this.data.nodeList && this.$refs.flowWrap) {
-      const nodeWidth = 150
-      const nodeHeight = 50
+      const nodeWidth = 120
+      const nodeHeight = 40
       let wrapInfo = this.$refs.flowWrap.getBoundingClientRect()
       let maxLeft = 0, minLeft = wrapInfo.width, maxTop = 0, minTop = wrapInfo.height;
       let nodePoint = {
