@@ -44,11 +44,21 @@ export default {
       auxiliaryLine: { isShowXLine: false, isShowYLine: false},  //对齐辅助线是否显示
       auxiliaryLinePos: { width: '100%', height: '100%', offsetX: 0, offsetY: 0, x: 20, y: 20 },
       commonGrid: [5, 5], //节点移动最小距离
+      selectModuleFlag: false, //多选标识
+      rectAngle: {
+        px: '',  //多选框绘制时的起始点横坐标
+        py: '',  //多选框绘制时的起始点纵坐标
+        left: 0,
+        top: 0,
+        height: 0,
+        width: 0
+      }
     };
   },
   mounted() {
     this.jsPlumb = jsPlumb.getInstance();
     this.fixNodesPosition()
+    this.addListenEventOnCanvas()
     this.$nextTick(() => {
       this.init();
     });
