@@ -312,46 +312,6 @@ const methods = {
       })
     }
   }, 
-
-  //给画布添加监听事件，当按下Ctrl键 和 左键时画多选框
-  addListenEventOnCanvas() {
-    $("#flow").on('mousedown',(event) => {
-      if(event.ctrlKey) {
-        this.rectAngle.px = event.offsetX
-        this.rectAngle.py = event.offsetY
-      }
-    }).mousemove((event) => {
-      if(this.rectAngle.px === '' || this.rectAngle.py === '') {
-        return
-      }
-      this.selectModuleFlag = true
-      //确定多选框的左上角的横坐标和宽度
-      if(event.offsetX >= this.rectAngle.px) {
-        this.rectAngle.left = this.rectAngle.px
-        this.rectAngle.width = event.offsetX - this.rectAngle.px
-      }else{
-        this.rectAngle.left = event.offsetX
-        this.rectAngle.width = this.rectAngle.px - event.offsetX
-      }
-      //确定多选框的左上角的纵坐标和高度
-      if(event.offsetY >= this.rectAngle.py) {
-        this.rectAngle.top = this.rectAngle.py
-        this.rectAngle.height = event.offsetY - this.rectAngle.py
-      }else {
-        this.rectAngle.top = event.offsetY
-        this.rectAngle.height =  this.rectAngle.py - event.offsetY
-      }
-
-      if($('#multipleSelectRectAngle').attr('id') == undefined) {
-        $('#flow').append('<div id="multipleSelectRectAngle" style="background-color: #000"></div>')
-      }
-      $('#multipleSelectRectAngle').css({"height": this.rectAngle.height+'px', "width": this.rectAngle.width + 'px', "position": "absolute", "pointer-events": "none", "left": this.rectAngle.left + 'px', "top": this.rectAngle.top + 'px', "opacity": 0.2, "border": "1px solid #000" })
-    }).mouseup(() => {
-      this.rectAngle.px = ''
-      this.rectAngle.py = ''
-      $('#multipleSelectRectAngle').remove()
-    })
-  }
 }
 
 export default methods;

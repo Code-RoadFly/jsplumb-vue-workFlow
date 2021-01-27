@@ -58,7 +58,6 @@ export default {
   mounted() {
     this.jsPlumb = jsPlumb.getInstance();
     this.fixNodesPosition()
-    this.addListenEventOnCanvas()
     this.$nextTick(() => {
       this.init();
     });
