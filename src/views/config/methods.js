@@ -7,18 +7,23 @@ const methods = {
     this.jsPlumb.ready(() => {
       // 导入默认配置
       this.jsPlumb.importDefaults(this.jsplumbSetting);
-      // 连线
+      //完成连线前的校验
+      this.jsPlumb.bind("beforeDrop", evt => {
+        let res = () => { } //此处可以添加是否创建连接的校验， 返回 false 则不添加； 
+        return res
+      })
+      // 连线创建成功后，维护本地数据
       this.jsPlumb.bind("connection", evt => {
-        let from = evt.source.id;
-        let to = evt.target.id;
-        this.data.lineList.push({
-          from: from,
-          to: to,
-          label: "连线名称",
-          id: GenNonDuplicateID(8),
-          Remark: ""
-        });
+        this.addLine(evt)
       });
+      //连线双击删除事件
+      this.jsPlumb.bind("dblclick",(conn, originalEvent) => {
+        this.confirmDelLine(conn)
+      })
+      //断开连线后，维护本地数据
+      this.jsPlumb.bind("connectionDetached", evt => {
+        this.deleLine(evt)
+      })
       this.loadEasyFlow();
       // 会使整个jsPlumb立即重绘。
       this.jsPlumb.setSuspendDrawing(false, true);
@@ -121,6 +126,33 @@ const methods = {
       left:  (Math.round(left/20))*20 + "px"
     };
     this.addNode(temp);
+  },
+  addLine(line) {
+    let from = line.source.id;
+    let to = line.target.id;
+    this.data.lineList.push({
+      from: from,
+      to: to,
+      label: "连线名称",
+      id: GenNonDuplicateID(8),
+      Remark: ""
+    });
+  },
+  confirmDelLine(line) {
+    this.$Modal.confirm({
+      title: '删除连线',
+      content: "<p>确认删除该连线？</p>",
+      onOk: () => {
+        this.jsPlumb.deleteConnection(line)
+      }
+    })
+  },
+  deleLine(line) {
+    this.data.lineList.forEach((item, index) => {
+      if(item.from === line.sourceId && item.to === line.targetId) {
+        this.data.lineList.splice(index, 1)
+      }
+    })
   },
   // dragover默认事件就是不触发drag事件，取消默认事件后，才会触发drag事件
   allowDrop(event) {
