@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <div>项目地址：<a href="https://github.com/Code-RoadFly/jsplumb-vue-wordFlow" target="_blank">https://github.com/Code-RoadFly/jsplumb-vue-wordFlow</a></div>
     <router-view/>
   </div>
 </template>
