@@ -1,5 +1,4 @@
 import panzoom from "panzoom";
-import $ from "jquery";
 import { GenNonDuplicateID } from "@/common/until";
 
 const methods = {

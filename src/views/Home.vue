@@ -35,7 +35,11 @@ export default {
       jsPlumb: null,
       currentItem: null,
       nodeTypeList: nodeTypeList,
-      data: data,
+      nodeTypeObj: {},
+      data: {
+        nodeList: [],
+        lineList: []
+      },
       selectedList: [],
       jsplumbSetting: jsplumbSetting,
       jsplumbConnectOptions: jsplumbConnectOptions,
@@ -57,6 +61,8 @@ export default {
   },
   mounted() {
     this.jsPlumb = jsPlumb.getInstance();
+    this.initNodeTypeObj()
+    this.initNode()
     this.fixNodesPosition()
     this.$nextTick(() => {
       this.init();
@@ -64,6 +70,19 @@ export default {
   },
   methods: {
     ...methods,
+    initNodeTypeObj() {
+      nodeTypeList.map(v => {
+        this.nodeTypeObj[v.type] = v
+      })
+    },
+    initNode() {
+      this.data.lineList = data.lineList
+      data.nodeList.map(v => {
+        v.logImg = this.nodeTypeObj[v.type].logImg
+        v.log_bg_color = this.nodeTypeObj[v.type].log_bg_color
+        this.data.nodeList.push(v)
+      })
+    },
   }
 };
 </script>

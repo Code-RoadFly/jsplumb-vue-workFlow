@@ -36,4 +36,6 @@ const nodeTypeList = [{
   log_bg_color: 'rgba(250, 205, 81, 0.2)'
 }]
 
+console.log(nodeTypeList)
+
 export {nodeTypeList};
