@@ -34,7 +34,7 @@ export const jsplumbSetting = {
     stroke: "#409eff",
     strokeWidth: 2
   },
-  HoverPaintStyle: { stroke: "#ff00cc", strokeWidth: 2 },
+  HoverPaintStyle: { stroke: "#ff00cc", strokeWidth: 2},
   // 绘制箭头
   Overlays: [
     [

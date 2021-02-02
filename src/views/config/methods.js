@@ -223,16 +223,16 @@ const methods = {
     })
 
     // 平移时设置鼠标样式
-    mainContainerWrap.style.cursor = "grab";
-    mainContainerWrap.addEventListener("mousedown", function wrapMousedown() {
-      this.style.cursor = "grabbing";
-      mainContainerWrap.addEventListener("mouseout", function wrapMouseout() {
-        this.style.cursor = "grab";
-      });
-    });
-    mainContainerWrap.addEventListener("mouseup", function wrapMouseup() {
-      this.style.cursor = "grab";
-    });
+    // mainContainerWrap.style.cursor = "grab";
+    // mainContainerWrap.addEventListener("mousedown", function wrapMousedown() {
+    //   this.style.cursor = "grabbing";
+    //   mainContainerWrap.addEventListener("mouseout", function wrapMouseout() {
+    //     this.style.cursor = "grab";
+    //   });
+    // });
+    // mainContainerWrap.addEventListener("mouseup", function wrapMouseup() {
+    //   this.style.cursor = "grab";
+    // });
   }, 
 
   setNodeName(nodeId, name) {
