@@ -5,7 +5,7 @@
 
 ![Image text](https://github.com/Code-RoadFly/jsplumb-vue-wordFlow/blob/main/src/assets/sample.jpg)
 
-###  [Demo地址](https://code-roadfly.github.io/jsplumb-vue-wordFlow/#/)
+###  [Demo地址](https://code-roadfly.github.io/jsplumb-vue-workFlow/#/)
 
 
 ### 安装依赖
